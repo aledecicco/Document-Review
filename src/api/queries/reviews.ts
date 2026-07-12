@@ -1,7 +1,7 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
 import * as z from 'zod'
 
-const MOCK_FILE = '/review_mock.json'
+const MOCK_FILE = `${import.meta.env.BASE_URL}/review_mock.json`
 
 const Document = z.object({
   pdf_url: z.string(),
@@ -52,7 +52,9 @@ type Review = z.infer<typeof Review>
 const fetchReviews = async (): Promise<Review[]> => {
   // TODO: fetch real reviews from server
   const json = await (await fetch(MOCK_FILE)).json()
-  const reviews = [await Review.parseAsync(json)]
+  const review = await Review.parseAsync(json)
+  review.document.pdf_url = `${import.meta.env.BASE_URL}/${review.document.pdf_url}`
+  const reviews = [review]
 
   return new Promise((resolve) => setTimeout(() => resolve(reviews), 1 * 1000))
 }

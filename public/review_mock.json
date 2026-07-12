@@ -5,7 +5,7 @@
   "status": "on_review",
   "version": 2,
   "document": {
-    "pdf_url": "/example_document.pdf",
+    "pdf_url": "example_document.pdf",
     "pages": [
       { "page_num": 1, "height": 792, "width": 612 },
       { "page_num": 2, "height": 792, "width": 612 },

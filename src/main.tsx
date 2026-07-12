@@ -11,7 +11,7 @@ import { RPConfig } from '@react-pdf-kit/viewer'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <RouteProvider>
         <ApiProvider>
           <ThemeProvider defaultTheme="light">
