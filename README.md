@@ -1,7 +1,8 @@
 ## Document Review
 
 This is a responsive web application that implements the "review page" requirement.
-By Alejandro De Cicco.
+
+Hosted [here](https://aledecicco.github.io/Document-Review/).
 
 ### Usage
 
