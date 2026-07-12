@@ -72,7 +72,7 @@ const ReviewIssues = (props: ReviewIssuesProps) => {
                 aria-label={`page ${issue.page}: ${issue.title}. click to view.`}
                 key={issue.id}
                 className={cx(
-                  'cursor-pointer hover:bg-secondary focus:bg-secondary',
+                  'cursor-pointer rounded-r-md hover:bg-secondary focus:bg-secondary text-start',
                 )}
                 onClick={() => {
                   goToPage(issue.page)
@@ -104,7 +104,16 @@ const IssueItem = (props: IssueItemProps) => {
   const { issue, isCurrent, ...divProps } = props
 
   return (
-    <div {...divProps} className={cx(divProps.className, 'p-2')}>
+    <div
+      {...divProps}
+      className={cx(
+        divProps.className,
+        'p-2 pl-3 border-l-2',
+        issue.severity === 'critical' && 'border-l-fg-error-secondary',
+        issue.severity === 'major' && 'border-l-fg-warning-secondary',
+        issue.severity === 'minor' && 'border-l-utility-neutral-300',
+      )}
+    >
       <div className={cx('flex flex-row items-center gap-2')}>
         <BadgeWithDot
           color={

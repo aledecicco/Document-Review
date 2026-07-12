@@ -54,7 +54,7 @@ const fetchReviews = async (): Promise<Review[]> => {
   const json = await (await fetch(MOCK_FILE)).json()
   const reviews = [await Review.parseAsync(json)]
 
-  return reviews
+  return new Promise((resolve) => setTimeout(() => resolve(reviews), 1 * 1000))
 }
 
 const REVIEWS_QUERY_KEY = ['reviews']

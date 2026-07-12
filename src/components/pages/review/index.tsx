@@ -1,6 +1,8 @@
+import { AlertTriangle, ChevronRight, Clock, FileX02 } from '@untitledui/icons'
 import { useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 import { type Review, useQueryReviews } from '@/api/queries/reviews'
+import { BadgeWithDot } from '@/components/base/Badge'
 import { Button } from '@/components/base/Button'
 import { PdfViewer } from '@/components/base/PdfViewer'
 import { PdfProvider } from '@/components/base/PdfViewer/provider'
@@ -23,9 +25,27 @@ const ReviewContent = () => {
 
         if (!review) {
           return (
-            <p className={cx('text-md text-error-primary')}>
-              Document #{id} not found
-            </p>
+            <div
+              className={cx(
+                'size-full flex flex-col items-center justify-center gap-3 py-16 text-center',
+              )}
+            >
+              <div
+                className={cx(
+                  'flex items-center justify-center size-11 rounded-full bg-error-primary text-fg-error-primary',
+                )}
+              >
+                <FileX02 className={cx('size-5')} aria-hidden="true" />
+              </div>
+              <div>
+                <p className={cx('text-md text-primary font-semibold')}>
+                  Document #{id} not found
+                </p>
+                <p className={cx('text-sm text-tertiary')}>
+                  It may have been moved or removed.
+                </p>
+              </div>
+            </div>
           )
         }
 
@@ -46,6 +66,16 @@ const ReviewContentInner = (props: ReviewContentInnerProps) => {
     (issue) => issue.severity !== 'minor',
   )
 
+  const criticalCount = review.issues.filter(
+    (issue) => issue.severity === 'critical',
+  ).length
+  const majorCount = review.issues.filter(
+    (issue) => issue.severity === 'major',
+  ).length
+  const minorCount = review.issues.filter(
+    (issue) => issue.severity === 'minor',
+  ).length
+
   const docRef = useRef<HTMLDivElement>(null)
 
   return (
@@ -57,17 +87,72 @@ const ReviewContentInner = (props: ReviewContentInnerProps) => {
           'lg:grid-cols-[1fr_350px] xl:grid-cols-[1fr_500px] lg:grid-rows-[max-content_1fr] lg:gap-16',
         )}
       >
-        <div>
-          <h2 className={cx('text-lg font-semibold')}>
-            {review.name} - Version {review.version}
-          </h2>
-          <h4 className={cx('text-md')}>
+        <div
+          className={cx(
+            'flex flex-col gap-3 pb-4 border-b border-border-secondary',
+          )}
+        >
+          <nav
+            aria-label="Breadcrumb"
+            className={cx(
+              'flex items-center gap-1 text-sm text-tertiary',
+            )}
+          >
+            <NavLink
+              to="/documents"
+              className={cx('hover:text-secondary transition-inherit-all')}
+            >
+              Documents
+            </NavLink>
+            <ChevronRight className={cx('size-3.5 text-fg-quaternary')} />
+            <span className={cx('text-secondary font-medium truncate')}>
+              {review.name}
+            </span>
+          </nav>
+
+          <div className={cx('flex flex-wrap items-center gap-3')}>
+            <h2 className={cx('text-xl font-semibold text-primary')}>
+              {review.name}
+            </h2>
+            <BadgeWithDot color="gray">Version {review.version}</BadgeWithDot>
+          </div>
+
+          <div
+            className={cx(
+              'flex items-center gap-1.5 text-sm text-fg-secondary',
+            )}
+          >
+            <Clock className={cx('size-4 text-fg-quaternary')} />
             Uploaded by {review.user.first_name} {review.user.last_name},{' '}
             {dateToString(review.uploaded_at)}
-          </h4>
+          </div>
+
+          {review.issues.length > 0 && (
+            <div className={cx('flex flex-wrap items-center gap-2')}>
+              {criticalCount > 0 && (
+                <BadgeWithDot color="error">
+                  {pluralize(criticalCount, 'critical issue')}
+                </BadgeWithDot>
+              )}
+              {majorCount > 0 && (
+                <BadgeWithDot color="warning">
+                  {pluralize(majorCount, 'major issue')}
+                </BadgeWithDot>
+              )}
+              {minorCount > 0 && (
+                <BadgeWithDot color="gray">
+                  {pluralize(minorCount, 'minor issue')}
+                </BadgeWithDot>
+              )}
+            </div>
+          )}
         </div>
 
-        <div className={cx('flex flex-col items-center gap-2')}>
+        <div
+          className={cx(
+            'flex flex-col items-center gap-2 rounded-lg border border-border-secondary p-4 shadow-xs h-max',
+          )}
+        >
           {requiredFixes.length > 0 ? (
             <>
               <Button
@@ -80,10 +165,17 @@ const ReviewContentInner = (props: ReviewContentInnerProps) => {
               >
                 Re-Upload
               </Button>
-              <p className={cx('font-light text-fg-secondary')}>
+              <div
+                className={cx(
+                  'flex items-center gap-1.5 text-sm text-fg-secondary text-center',
+                )}
+              >
+                <AlertTriangle
+                  className={cx('size-4 text-fg-warning-primary shrink-0')}
+                />
                 This file has {pluralize(requiredFixes.length, 'issue')} that
                 need your attention.
-              </p>
+              </div>
             </>
           ) : (
             <>
@@ -98,10 +190,10 @@ const ReviewContentInner = (props: ReviewContentInnerProps) => {
                 Submit
               </Button>
               {review.issues.length > 0 && (
-                <p className={cx('font-semibold')}>
-                  This file still has
-                  {pluralize(review.issues.length, 'minor issue')} that could be
-                  fixed.
+                <p className={cx('text-sm font-semibold text-center')}>
+                  This file still has{' '}
+                  {pluralize(review.issues.length, 'minor issue')} that could
+                  be fixed.
                 </p>
               )}
             </>

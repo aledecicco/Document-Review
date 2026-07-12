@@ -33,16 +33,25 @@ const App = () => {
     >
       <div
         className={cx(
-          'w-full p-4 bg-bg-brand-solid flex items-center justify-between',
+          'w-full px-4 py-3.5 lg:px-6 bg-bg-brand-solid flex items-center justify-between shadow-sm relative z-10',
         )}
       >
-        <h1
-          className={cx(
-            'text-xl lg:text-2xl text-text-primary_on-brand font-bold',
-          )}
-        >
-          Document Review
-        </h1>
+        <div className={cx('flex items-center gap-3')}>
+          <div
+            className={cx(
+              'p-2 rounded-lg bg-white/15 text-text-primary_on-brand',
+            )}
+          >
+            <File01 className={cx('size-5')} aria-hidden="true" />
+          </div>
+          <h1
+            className={cx(
+              'text-lg lg:text-xl text-text-primary_on-brand font-bold tracking-tight',
+            )}
+          >
+            Document Review
+          </h1>
+        </div>
 
         <MobileNavigationHeader>
           <NavList activeUrl={pathname} items={navItems} />

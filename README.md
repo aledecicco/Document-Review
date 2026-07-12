@@ -27,7 +27,7 @@ Before this app is production-ready, there are many things to consider:
 
 ### Design
 
-https://figma...
+[Link to Figma file](https://www.figma.com/site/F8sebMMTrNpRDxGi4hKhex/Document-Review-Mock)
 
 ### Considerations
 
