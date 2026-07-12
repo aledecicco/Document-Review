@@ -14,63 +14,20 @@ interface NavListProps {
 }
 
 const NavList = ({ activeUrl, items, className }: NavListProps) => {
-  const activeItem = items.find(
-    (item) =>
-      item.href === activeUrl ||
-      item.items?.some((subItem) => subItem.href === activeUrl),
-  )
-
   return (
     <ul className={cx('flex flex-col px-4 pt-5', className)}>
-      {items.map((item, index) => {
+      {items.map((item) => {
         if (item.divider) {
           return (
-            <li key={index} className="w-full px-0.5 py-2">
+            <li key={item.href} className="w-full px-0.5 py-2">
               <hr className="h-px w-full border-none bg-border-secondary" />
             </li>
-          )
-        }
-
-        if (item.items?.length) {
-          return (
-            <details
-              key={item.label}
-              open={activeItem?.href === item.href}
-              className="appearance-none py-px"
-            >
-              <NavItemBase
-                href={item.href}
-                badge={item.badge}
-                icon={item.icon}
-                type="collapsible"
-              >
-                {item.label}
-              </NavItemBase>
-
-              <dd>
-                <ul className="pb-1">
-                  {item.items.map((childItem) => (
-                    <li key={childItem.label} className="py-px">
-                      <NavItemBase
-                        href={childItem.href}
-                        badge={childItem.badge}
-                        type="collapsible-child"
-                        current={activeUrl === childItem.href}
-                      >
-                        {childItem.label}
-                      </NavItemBase>
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </details>
           )
         }
 
         return (
           <li key={item.label} className="py-px">
             <NavItemBase
-              type="link"
               badge={item.badge}
               icon={item.icon}
               href={item.href}

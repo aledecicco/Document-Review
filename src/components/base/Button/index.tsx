@@ -1,4 +1,4 @@
-import type { FC, ReactElement, ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { isValidElement } from 'react'
 import type {
   ButtonProps as AriaButtonProps,
@@ -6,7 +6,6 @@ import type {
 } from 'react-aria-components'
 import { Button as AriaButton, Link as AriaLink } from 'react-aria-components'
 import { cx, sortCx } from '@/utils/cx'
-import { isReactComponent } from '@/utils/is-react-component'
 
 export const styles = sortCx({
   common: {
@@ -144,9 +143,9 @@ export interface CommonProps {
   /** The color variant of the button */
   color?: keyof typeof styles.colors
   /** Icon component or element to show before the text */
-  iconLeading?: FC<{ className?: string }> | ReactNode
+  iconLeading?: ReactNode
   /** Icon component or element to show after the text */
-  iconTrailing?: FC<{ className?: string }> | ReactNode
+  iconTrailing?: ReactNode
   /** Removes horizontal padding from the text content */
   noTextPadding?: boolean
   /** When true, keeps the text visible during loading state */
@@ -201,11 +200,7 @@ const Button: {
 
   const commonChildren = (
     <>
-      {/* Leading icon */}
       {isValidElement(IconLeading) && IconLeading}
-      {isReactComponent(IconLeading) && (
-        <IconLeading data-icon="leading" className={styles.common.icon} />
-      )}
 
       {loading && (
         <svg
@@ -253,9 +248,6 @@ const Button: {
 
       {/* Trailing icon */}
       {isValidElement(IconTrailing) && IconTrailing}
-      {isReactComponent(IconTrailing) && (
-        <IconTrailing data-icon="trailing" className={styles.common.icon} />
-      )}
     </>
   )
 

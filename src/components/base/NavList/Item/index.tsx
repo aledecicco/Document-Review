@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronDown, Share04 } from '@untitledui/icons'
+import { Share04 } from '@untitledui/icons'
 import type { FC, HTMLAttributes, MouseEventHandler, ReactNode } from 'react'
 import { Link as AriaLink } from 'react-aria-components'
 import { Badge } from '@/components/base/Badge'
@@ -18,8 +18,6 @@ interface NavItemBaseProps {
   open?: boolean
   /** URL to navigate to when the nav item is clicked. */
   href?: string
-  /** Type of the nav item. */
-  type: 'link' | 'collapsible' | 'collapsible-child'
   /** Icon component to display. */
   icon?: FC<HTMLAttributes<HTMLOrSVGElement>>
   /** Badge to display. */
@@ -36,7 +34,6 @@ interface NavItemBaseProps {
 
 const NavItemBase = ({
   current,
-  type,
   badge,
   href,
   icon: Icon,
@@ -80,50 +77,9 @@ const NavItemBase = ({
     <Share04 className="size-4 stroke-[2.5px] text-fg-quaternary" />
   )
 
-  if (type === 'collapsible') {
-    return (
-      <summary
-        className={cx('p-2', styles.root, current && styles.rootSelected)}
-        onClick={onClick}
-      >
-        {iconElement}
-
-        {labelElement}
-
-        {badgeElement}
-
-        <ChevronDown
-          aria-hidden="true"
-          className="ml-3 size-4 shrink-0 stroke-[2.5px] text-fg-quaternary in-open:-scale-y-100"
-        />
-      </summary>
-    )
-  }
-
-  if (type === 'collapsible-child') {
-    return (
-      <AriaLink
-        href={href!}
-        target={isExternal ? '_blank' : '_self'}
-        rel="noopener noreferrer"
-        className={cx(
-          'py-2 pr-3 pl-10',
-          styles.root,
-          current && styles.rootSelected,
-        )}
-        onClick={onClick}
-        aria-current={current ? 'page' : undefined}
-      >
-        {labelElement}
-        {externalIcon}
-        {badgeElement}
-      </AriaLink>
-    )
-  }
-
   return (
     <AriaLink
-      href={href!}
+      href={href}
       target={isExternal ? '_blank' : '_self'}
       rel="noopener noreferrer"
       className={cx(
